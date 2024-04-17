@@ -1,0 +1,42 @@
+extends base
+
+block content
+  main.main
+    .card-container
+    
+      each photo in photos
+        .card
+          .card__header
+            .card__picture
+              .card__picture-overlay &nbsp;
+              img.card__picture-img(src=`/img/photos/${photo.imageCover}`, alt=`${photo.name}`)
+            h3.heading-tertirary
+              span= photo.name
+
+          .card__details
+            h4.card__sub-heading 
+              svg.card__icon
+                use(xlink:href='/img/icons.svg#icon-user')
+              span= photo.author.name
+            p.card__text= photo.description
+            .card__data
+              svg.card__icon
+                use(xlink:href='/img/icons.svg#icon-map-pin')
+              span= photo.location
+            .card__data
+              svg.card__icon
+                use(xlink:href='/img/icons.svg#icon-calendar')
+              span= photo.createdAt.toLocaleString('en-us', {month: 'long', year: 'numeric'})
+            .card__data
+              svg.card__icon
+                use(xlink:href='/img/icons.svg#icon-camera')
+              span= `${photo.device}`
+            .card__data
+              svg.card__icon
+                use(xlink:href='/img/icons.svg#icon-heart')
+              span= `${photo.likesQuantity}`
+
+          .card__footer
+            a.btn.btn--green.btn--small(href=`/photo/${photo.slug}`) Details
+            if (user && (photo.author._id.toString() === user._id.toString() || user.role === 'admin'))
+              a.btn.btn--red.btn--small#delete-photo(data-photo-id=`${photo.id}`) Delete
