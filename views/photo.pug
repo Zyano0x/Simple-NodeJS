@@ -33,16 +33,7 @@ block content
           +overviewBox('Published', date, 'calendar')
           +overviewBox('Device', photo.device, 'camera')
           if user
-            if photo.likes
-              each like in photo.likes
-                if like.user._id.toString() === user._id.toString()
-                  .overview-box__detail
-                    svg.overview-box__icon(id=`heart-filled`, data-like-id=`${like.id}`)
-                      use(xlink:href=`/img/icons.svg#icon-heart-filled`)
-                    span.overview-box__label= 'Likes'
-                    span.overview-box__text= `${photo.likesQuantity}`
-            else
-              .overview-box__detail
+            .overview-box__detail
                 svg.overview-box__icon(id=`heart`, data-photo-id=`${photo.id}`, data-user-id=user._id.toString())
                   use(xlink:href=`/img/icons.svg#icon-heart`)
                 span.overview-box__label= 'Likes'
