@@ -34,7 +34,7 @@ exports.createLike = AsyncHandle(async (req, res, next) => {
   if (!newLike) return next(new ErrorHandle('Cannot like this.', 404));
 
   await Photo.findByIdAndUpdate(
-    newLike.photo._id,
+    newLike.photo.id,
     { $inc: { likesQuantity: 1 } },
     { new: true }
   );
@@ -48,17 +48,8 @@ exports.createLike = AsyncHandle(async (req, res, next) => {
 });
 
 exports.removeLike = AsyncHandle(async (req, res, next) => {
-  const like = await Like.findById(req.params.id);
-
-  if (!like) return next(new AppError('No like found with that ID', 404));
-
-  await Photo.findByIdAndUpdate(
-    like.photo._id,
-    { $inc: { likesQuantity: -1 } },
-    { new: true }
-  );
-
-  like.deleteOne();
+  const photo = await Photo.findById(req.params.id);
+  console.log(photo);
 
   res.status(204).json({
     status: 'success',

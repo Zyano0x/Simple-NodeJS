@@ -13,9 +13,6 @@ router
 router
   .route('/:id')
   .get(authController.restrictTo('admin'), likeController.getLike)
-  .delete(
-    authController.restrictTo('user', 'admin'),
-    likeController.removeLike
-  );
+  .delete(authController.restrictTo('user'), likeController.removeLike);
 
 module.exports = router;
