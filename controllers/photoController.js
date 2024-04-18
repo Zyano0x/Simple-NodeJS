@@ -97,12 +97,12 @@ exports.patchPhoto = AsyncHandle(async (req, res, next) => {
   }
 
   // Check if the user making the request is the owner of the photo or if the user is an admin
-  if (photo.author.id !== req.user.id && req.user.role !== 'admin') {
+  if (photo.author._id !== req.user._id && req.user.role !== 'admin') {
     return next(
       new ErrorHandle('You are not authorized to update this photo', 403)
     );
   }
-
+  console.log(photo.author._id, req.user._id);
   // Update the photo
   const updatedPhoto = await Photo.findByIdAndUpdate(req.params.id, req.body, {
     new: true,
@@ -124,7 +124,7 @@ exports.deletePhoto = AsyncHandle(async (req, res, next) => {
     return next(new ErrorHandle('No photo found with that ID', 404));
   }
 
-  if (photo.author.id !== req.user.id && req.user.role !== 'admin') {
+  if (photo.author._id !== req.user._id && req.user.role !== 'admin') {
     return next(
       new ErrorHandle('You are not authorized to delete this photo', 403)
     );

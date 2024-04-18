@@ -11,3 +11,14 @@ function submitForm(event) {
   // Chuyển hướng đến URL mong muốn
   window.location.href = `http://127.0.0.1:1337/search/${searchInput.replace('#', '?hashtags=').replaceAll('#', ',')}`;
 }
+
+export const search = () => {
+  let searchInput = document.getElementById('searchInput').value;
+
+  if (searchInput.startsWith('#')) {
+    searchInput = 'all' + searchInput;
+  }
+
+  // Chuyển hướng đến URL mong muốn
+  window.location.href = `http://127.0.0.1:1337/search/${searchInput.replace('#', '?hashtags=').replaceAll('#', ',')}`;
+};

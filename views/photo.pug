@@ -35,7 +35,7 @@ block content
           +overviewBox('Hash Tags', photo.hashTags, 'hash')
           if user
             .overview-box__detail
-                svg.overview-box__icon(id=`heart`, data-photo-id=`${photo.id}`, data-user-id=user._id.toString())
+                svg.overview-box__icon(id=`heart`, data-photo-id=`${photo.id}`, data-user-id=user.id)
                   use(xlink:href=`/img/icons.svg#icon-heart`)
                 span.overview-box__label= 'Likes'
                 span.overview-box__text= `${photo.likesQuantity}`
@@ -67,5 +67,5 @@ block content
         h2.heading-secondary What are you waiting for?
         p.cta__text= '1 adventure. Infinite memories. Make it yours today!'
         button.btn.btn--green.span-all-rows#download-all(data-images=`${photo.images}`) Download now!
-        if (user && (photo.author._id.toString() === user._id.toString() || user.role === 'admin'))
-          button.btn.btn--red.span-all-rows#delete-photo(data-photo-id=`${photo.id}`) Delete
+        if (user && (photo.author.id === user.id || user.role === 'admin'))
+          button.btn.btn--red.btn--delete.span-all-rows#delete-photo(data-photo-id=`${photo.id}`) Delete

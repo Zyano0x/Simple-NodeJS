@@ -4,15 +4,17 @@ import { updateSettings } from './updateSettings';
 import { deletePhoto } from './delete';
 import { downloadPhotos } from './download';
 import { like } from './likes';
+import { search } from './overview';
 
 const loginForm = document.querySelector('.form--login');
 const signUpForm = document.querySelector('.form--register');
 const logOutBtn = document.querySelector('.nav__el--logout');
 const userDataForm = document.querySelector('.form-user-data');
 const userPasswordForm = document.querySelector('.form-user-password');
-const deleteBtn = document.getElementById('delete-photo');
+const deleteBtn = document.querySelectorAll('.btn--delete');
 const downloadBtn = document.getElementById('download-all');
 const likeIcon = document.getElementById('heart');
+const searchForm = document.querySelector('.box-search');
 
 if (loginForm)
   loginForm.addEventListener('submit', (e) => {
@@ -66,11 +68,13 @@ if (userPasswordForm)
   });
 
 if (deleteBtn)
-  deleteBtn.addEventListener('click', (e) => {
-    e.target.textContent = 'Deleting...';
-    const { photoId } = e.target.dataset;
-    deletePhoto(photoId);
-  });
+  deleteBtn.forEach((btn) =>
+    btn.addEventListener('click', (e) => {
+      e.target.textContent = 'Deleting...';
+      const { photoId } = e.target.dataset;
+      deletePhoto(photoId);
+    })
+  );
 
 if (downloadBtn)
   downloadBtn.addEventListener('click', (e) => {
@@ -93,4 +97,10 @@ if (likeIcon)
     const photo = e.target.dataset.photoId;
     const user = e.target.dataset.userId;
     like({ photo, user });
+  });
+
+if (searchForm)
+  searchForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    search();
   });

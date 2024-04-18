@@ -34,7 +34,7 @@ exports.createLike = AsyncHandle(async (req, res, next) => {
   if (!newLike) return next(new ErrorHandle('Cannot like this.', 404));
 
   await Photo.findByIdAndUpdate(
-    newLike.photo.id,
+    newLike.photo._id,
     { $inc: { likesQuantity: 1 } },
     { new: true }
   );
