@@ -32,6 +32,7 @@ block content
           +overviewBox('Author', photo.author.name, 'user')
           +overviewBox('Published', date, 'calendar')
           +overviewBox('Device', photo.device, 'camera')
+          +overviewBox('Hash Tags', photo.hashTags, 'hash')
           if user
             .overview-box__detail
                 svg.overview-box__icon(id=`heart`, data-photo-id=`${photo.id}`, data-user-id=user._id.toString())

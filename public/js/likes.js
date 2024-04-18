@@ -17,3 +17,18 @@ export const like = async (data) => {
     showAlert('error', err.response.data.message);
   }
 };
+
+export const unlike = async (id) => {
+  try {
+    const res = await axios({
+      method: 'DELETE',
+      url: `http://127.0.0.1:1337/api/v1/likes/${id}`,
+    });
+
+    if (res.status === 204) {
+      location.reload(true);
+    }
+  } catch (err) {
+    showAlert('error', err.response.data.message);
+  }
+};
