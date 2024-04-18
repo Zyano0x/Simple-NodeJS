@@ -5627,6 +5627,9 @@ var updateSettings = exports.updateSettings = /*#__PURE__*/function () {
           res = _context.sent;
           if (res.data.status === 'success') {
             (0, _alerts.showAlert)('success', "".concat(type.toUpperCase(), " updated successfully!"));
+            window.setTimeout(function () {
+              location.reload(true);
+            }), 1500;
           }
           _context.next = 12;
           break;
@@ -5928,7 +5931,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "50482" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "58587" + '/');
   ws.onmessage = function (event) {
     checkedAssets = {};
     assetsToAccept = [];

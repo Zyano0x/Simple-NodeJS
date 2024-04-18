@@ -23,7 +23,7 @@ exports.uploadPhotos = upload.fields([
 ]);
 
 exports.resizePhotos = AsyncHandle(async (req, res, next) => {
-  if (!req.files.imageCover || !req.files.images) return next();
+  if (!req.files || !req.files.imageCover || !req.files.images) return next();
 
   // 1) Cover image
   req.body.imageCover = `photo-${Date.now()}-cover.jpeg`;
@@ -97,17 +97,18 @@ exports.patchPhoto = AsyncHandle(async (req, res, next) => {
   }
 
   // Check if the user making the request is the owner of the photo or if the user is an admin
-  if (photo.user.toString() !== req.user.id && req.user.role !== 'admin') {
+  if (photo.author.id !== req.user.id && req.user.role !== 'admin') {
     return next(
       new ErrorHandle('You are not authorized to update this photo', 403)
     );
   }
 
   // Update the photo
-  const updatedPhoto = await Photo.updateOne(req.body, {
+  const updatedPhoto = await Photo.findByIdAndUpdate(req.params.id, req.body, {
     new: true,
     runValidators: true,
   });
+  await updatedPhoto.save();
 
   res.status(200).json({
     status: 'success',
@@ -124,8 +125,7 @@ exports.deletePhoto = AsyncHandle(async (req, res, next) => {
     return next(new ErrorHandle('No photo found with that ID', 404));
   }
 
-  // Check if the user making the request is the owner of the photo or if the user is an admin
-  if (photo.user.toString() !== req.user.id && req.user.role !== 'admin') {
+  if (photo.author.id !== req.user.id && req.user.role !== 'admin') {
     return next(
       new ErrorHandle('You are not authorized to delete this photo', 403)
     );

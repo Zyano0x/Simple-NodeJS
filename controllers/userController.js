@@ -2,6 +2,7 @@ const User = require('./../models/userModel');
 const ErrorHandle = require('./../utils/errorHandle');
 const AsyncHandle = require('./../utils/asyncHandle');
 const multer = require('multer');
+const sharp = require('sharp');
 
 // const multerStorage = multer.diskStorage({
 //   destination: (req, file, cb) => {

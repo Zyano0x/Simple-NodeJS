@@ -1152,6 +1152,11 @@ body {
   font-style: italic;
   margin-top: -1rem;
   margin-bottom: 0.75rem;
+
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  overflow: hidden;
 }
 .card__data {
   font-size: 1.3rem;
