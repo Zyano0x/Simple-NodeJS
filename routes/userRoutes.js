@@ -28,7 +28,10 @@ router.route('/').get(userController.getAllUsers);
 router
   .route('/:id')
   .get(userController.getUser)
-  .patch(userController.patchUser)
-  .delete(userController.deleteUser);
+// .patch(userController.patchUser)
+
+router.patch('/disable/:id', userController.disableUser);
+router.patch('/enable/:id', userController.enableUser);
+
 
 module.exports = router;
