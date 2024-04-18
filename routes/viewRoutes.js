@@ -6,6 +6,7 @@ const router = express.Router();
 
 router.get('/', authController.isLoggedIn, viewsController.getOverview);
 router.get('/photo/:slug', authController.isLoggedIn, viewsController.getPhoto);
+router.get('/search/:name?', authController.isLoggedIn, viewsController.search);
 router.get('/login', authController.isLoggedIn, viewsController.getLoginForm);
 router.get(
   '/register',

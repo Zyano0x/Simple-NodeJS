@@ -1,7 +1,7 @@
 const Photo = require('../models/photoModel');
 const User = require('../models/userModel');
-const AsyncHandle = require('../utils/AsyncHandle');
-const ErrorHandle = require('../utils/ErrorHandle');
+const AsyncHandle = require('./../utils/asyncHandle');
+const ErrorHandle = require('./../utils/errorHandle');
 
 exports.getOverview = AsyncHandle(async (req, res, next) => {
   // 1) Get tour data from collection
@@ -67,3 +67,31 @@ exports.updateUserData = AsyncHandle(async (req, res, next) => {
     user: updatedUser,
   });
 });
+
+exports.search = AsyncHandle(async (req, res, next) => {
+  const photos = await Photo.find({
+    $or: [
+      {
+        name: {
+          $regex: new RegExp(escapeRegex(req.params.name), 'gi'),
+        },
+      },
+      {
+        hashTags: {
+          $in: req.query.hashtags
+            ?.split(',')
+            .map((tag) => new RegExp(escapeRegex(tag), 'gi')),
+        },
+      },
+    ],
+  });
+
+  res.status(200).render('overview', {
+    title: `Result for ${req.params.name}`,
+    photos,
+  });
+});
+
+function escapeRegex(text) {
+  return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&');
+}

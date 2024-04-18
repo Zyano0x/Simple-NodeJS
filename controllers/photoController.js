@@ -108,7 +108,6 @@ exports.patchPhoto = AsyncHandle(async (req, res, next) => {
     new: true,
     runValidators: true,
   });
-  await updatedPhoto.save();
 
   res.status(200).json({
     status: 'success',
