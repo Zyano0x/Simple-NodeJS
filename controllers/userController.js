@@ -82,7 +82,7 @@ exports.inactiveAccount = AsyncHandle(async (req, res, next) => {
 });
 
 exports.getAllUsers = AsyncHandle(async (req, res, next) => {
-  const users = await User.find();
+  const users = await User.find({ active: { $ne: false } });
 
   res.status(200).json({
     status: 'status',
@@ -106,9 +106,30 @@ exports.patchUser = (req, res) => {
   });
 };
 
-exports.deleteUser = (req, res) => {
-  res.status(500).json({
-    status: 'error',
-    message: 'This route is not yet defined',
+exports.disableUser = AsyncHandle(async (req, res, next) => {
+  const user = await User.findByIdAndUpdate(req.params.id, { active: false }, {
+    new: true,
+    runValidators: true,
   });
-};
+
+  res.status(200).json({
+    status: 'success',
+    message: 'User is disabled'
+  });
+});
+
+exports.enableUser = AsyncHandle(async (req, res, next) => {
+  const user = await User.findByIdAndUpdate(req.params.id, { active: true }, {
+    new: true,
+    runValidators: true,
+  });
+
+  console.log(req.params.id);
+  console.log(user);
+
+  res.status(200).json({
+    status: 'success',
+    message: 'User is enabled'
+  });
+});
+
