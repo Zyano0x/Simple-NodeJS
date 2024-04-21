@@ -1,9 +1,8 @@
 const Photo = require('./../models/photoModel');
-const Like = require('./../models/likeModel');
-const ErrorHandle = require('../utils/errorHandle');
-const AsyncHandle = require('./../utils/asyncHandle');
+const factory = require('../controllers/handlerFactory');
 const multer = require('multer');
 const sharp = require('sharp');
+const AsyncHandle = require('./../utils/asyncHandle');
 
 const multerStorage = multer.memoryStorage();
 
@@ -53,87 +52,8 @@ exports.resizePhotos = AsyncHandle(async (req, res, next) => {
   next();
 });
 
-exports.getAllPhotos = AsyncHandle(async (req, res, next) => {
-  const photos = await Photo.find();
-
-  res.status(200).json({
-    status: 'success',
-    result: photos.length,
-    data: {
-      photos,
-    },
-  });
-});
-
-exports.getPhoto = AsyncHandle(async (req, res, next) => {
-  const photo = await Photo.findById(req.params.id).populate('likes');
-
-  if (!photo) return next(new ErrorHandle('No photo found with that ID', 404));
-
-  res.status(200).json({
-    status: 'success',
-    data: {
-      photo,
-    },
-  });
-});
-
-exports.uploadPhoto = AsyncHandle(async (req, res, next) => {
-  const newPhoto = await Photo.create(req.body);
-
-  res.status(201).json({
-    status: 'success',
-    data: {
-      tour: newPhoto,
-    },
-  });
-});
-
-exports.patchPhoto = AsyncHandle(async (req, res, next) => {
-  const photo = await Photo.findById(req.params.id);
-
-  if (!photo) {
-    return next(new ErrorHandle('No photo found with that ID', 404));
-  }
-
-  // Check if the user making the request is the owner of the photo or if the user is an admin
-  if (photo.author._id !== req.user._id && req.user.role !== 'admin') {
-    return next(
-      new ErrorHandle('You are not authorized to update this photo', 403)
-    );
-  }
-  console.log(photo.author._id, req.user._id);
-  // Update the photo
-  const updatedPhoto = await Photo.findByIdAndUpdate(req.params.id, req.body, {
-    new: true,
-    runValidators: true,
-  });
-
-  res.status(200).json({
-    status: 'success',
-    data: {
-      photo: updatedPhoto,
-    },
-  });
-});
-
-exports.deletePhoto = AsyncHandle(async (req, res, next) => {
-  const photo = await Photo.findById(req.params.id);
-
-  if (!photo) {
-    return next(new ErrorHandle('No photo found with that ID', 404));
-  }
-
-  if (photo.author._id !== req.user._id && req.user.role !== 'admin') {
-    return next(
-      new ErrorHandle('You are not authorized to delete this photo', 403)
-    );
-  }
-
-  await photo.deleteOne();
-
-  res.status(204).json({
-    status: 'success',
-    data: null,
-  });
-});
+exports.getAllPhotos = factory.getAll(Photo);
+exports.getPhoto = factory.getOne(Photo, { path: 'likes' });
+exports.uploadPhoto = factory.createOne(Photo);
+exports.patchPhoto = factory.updateOne(Photo);
+exports.deletePhoto = factory.deleteOne(Photo);

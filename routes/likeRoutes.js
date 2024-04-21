@@ -8,11 +8,8 @@ router.use(authController.protect);
 
 router
   .route('/')
-  .get(authController.restrictTo('admin'), likeController.getAllLikes)
+  .get(likeController.getAllLikes)
   .post(authController.restrictTo('user'), likeController.createLike);
-router
-  .route('/:id')
-  .get(authController.restrictTo('admin'), likeController.getLike)
-  .delete(authController.restrictTo('user'), likeController.removeLike);
+router.route('/:id').get(likeController.getLike);
 
 module.exports = router;
